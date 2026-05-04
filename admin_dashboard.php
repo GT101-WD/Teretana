@@ -78,7 +78,16 @@
                                     <td><?php echo $result['phone_number']; ?></td>
                                     <td><?php echo $result['trainer_id']; ?></td>
                                     <td><img style="width: 60px;" src="<?php echo $result['photo_path']; ?>"></td>
-                                    <td><?php echo $result['training_plan_name'] ?></td>
+                                    <td><?php 
+                                    
+                                    if($result['training_plan_name']) {
+                                        echo $result['training_plan_name'];
+                                    } else {
+                                        echo "Nema plana";
+                                    }
+                                    
+                                    
+                                    ?></td>
                                     <td><a target="_blank" href="<?php echo $result['access_card_pdf_path']; ?>">Access Card</td>
                                     <td><?php 
                                         
