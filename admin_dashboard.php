@@ -78,25 +78,7 @@
                                     <td><?php echo $result['phone_number']; ?></td>
                                     <td><?php echo $result['trainer_id']; ?></td>
                                     <td><img style="width: 60px;" src="<?php echo $result['photo_path']; ?>"></td>
-                                    <td><?php 
-                                        
-                                        $plan_id = $result['training_plan_id'];
-
-                                        $sql = "SELECT * FROM training_plans WHERE plan_id = ?";
-                                        $run = $conn->prepare($sql);
-                                        $run->bind_param('i', $plan_id);
-                                        $run->execute();
-                                        
-                                        $results = $run->get_result();
-                                        $results = $results->fetch_assoc();
-
-                                        if($results) {
-                                            echo $results['name'];
-                                        } else {
-                                            echo "Nema plana";
-                                        }
-                                        
-                                        ?></td>
+                                    <td><?php echo $result['training_plan_name'] ?></td>
                                     <td><a target="_blank" href="<?php echo $result['access_card_pdf_path']; ?>">Access Card</td>
                                     <td><?php 
                                         
