@@ -60,7 +60,10 @@
                         <tbody>
                             <?php 
                             
-                            $sql = "SELECT * FROM members";
+                            $sql = "SELECT members.*, 
+                                    training_plans.name AS training_plan_name
+                                    FROM `members` 
+                                    LEFT JOIN training_plans ON members.training_plan_id = training_plans.plan_id;";
 
                             $run = $conn->query($sql);
                             
