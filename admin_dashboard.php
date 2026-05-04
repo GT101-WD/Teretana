@@ -39,7 +39,7 @@
 
                 <div class="col-md-12">
 
-                    <h2>Member List 2026</h2>
+                    <h2>Member List January 2026</h2>
 
                     <table class="table table-striped">
                         <thead>    
