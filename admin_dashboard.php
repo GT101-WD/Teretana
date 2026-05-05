@@ -61,9 +61,12 @@
                             <?php 
                             
                             $sql = "SELECT members.*, 
-                                    training_plans.name AS training_plan_name
+                                    training_plans.name AS training_plan_name,
+                                    trainers.first_name AS trainer_first_name,
+                                    trainers.last_name AS trainer_last_name
                                     FROM `members` 
-                                    LEFT JOIN training_plans ON members.training_plan_id = training_plans.plan_id;";
+                                    LEFT JOIN `training_plans` ON members.training_plan_id = training_plans.plan_id
+                                    LEFT JOIN `trainers` ON members.trainer_id = trainers.trainer_id;";
 
                             $run = $conn->query($sql);
                             
@@ -76,7 +79,16 @@
                                     <td><?php echo $result['last_name']; ?></td>
                                     <td><?php echo $result['email']; ?></td>
                                     <td><?php echo $result['phone_number']; ?></td>
-                                    <td><?php echo $result['trainer_id']; ?></td>
+                                    <td><?php 
+                                        if($result['trainer_first_name']) {
+                                            echo $result['trainer_first_name'];
+                                        } else {
+                                            echo "Nema trenera";
+                                        }
+
+
+
+                                        ?></td>
                                     <td><img style="width: 60px;" src="<?php echo $result['photo_path']; ?>"></td>
                                     <td><?php 
                                     
