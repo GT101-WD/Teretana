@@ -41,6 +41,8 @@
 
                     <h2>Member List January 2026</h2>
 
+                    <a href="export.php?what=members" class="btn btn-success btn-sm">Export</a>
+
                     <table class="table table-striped">
                         <thead>    
                             <tr>
@@ -72,6 +74,8 @@
                             
                             $results = $run->fetch_all(MYSQLI_ASSOC);
 
+                            $select_members = $results;
+
                             foreach($results as $result) : ?>
 
                               <tr>
@@ -81,14 +85,14 @@
                                     <td><?php echo $result['phone_number']; ?></td>
                                     <td><?php 
                                         if($result['trainer_first_name']) {
-                                            echo $result['trainer_first_name'];
+                                            echo $result['trainer_first_name'] . " " . $result['trainer_last_name'];
                                         } else {
                                             echo "Nema trenera";
                                         }
 
 
 
-                                        ?></td>
+                                        ?></td>     
                                     <td><img style="width: 60px;" src="<?php echo $result['photo_path']; ?>"></td>
                                     <td><?php 
                                     
@@ -109,10 +113,15 @@
                                         
                                         ?></td>
                                   
-                                    <td><button>DELETE</button></td>
+                                    <td>
+                                        <form action="delete_member.php" method="POST">
+                                            <input type="hidden" name="member_id" value="<?php echo $result['member_id']; ?>">          
+                                        <button>DELETE</button>
+                                        </form>
+                                    </td>
 
                                     
-                              </tr>  
+                            </tr>  
 
                             <?php endforeach; ?> 
 
@@ -123,12 +132,53 @@
 
             </div>
 
+            <div class="col-md-12">
+                <h2>Trainer List 2026</h2>
+
+                <a href="export.php?what=trainers" class="btn btn-success btn-sm">Export</a>
+
+                 <table class="table table-striped">
+                        <thead>    
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        <?php 
+                            $sql = "SELECT * FROM trainers";
+                            
+                            $run = $conn->query($sql);
+                            
+                            $results = $run->fetch_all(MYSQLI_ASSOC);
+
+                            $select_trainers = $results;
+
+                            foreach($results as $result) : ?>
+                                
+                                <tr>
+                                    <td><?php echo $result['first_name']; ?></td>
+                                    <td><?php echo $result['last_name']; ?></td>
+                                    <td><?php echo $result['email']; ?></td>
+                                    <td><?php echo $result['phone_number']; ?></td>
+                                    <td><?php echo date("F jS, Y", strtotime($result['created_at'])) ?></td>
+                                </tr>    
+                                
+                            <?php endforeach; ?>
+                    </tbody>
+                 
+                 </table>           
+            </div>
+
 
 
         <div class="row mb-5">
             <div class="col-md-6">
                 <h2>Register Member</h2>
-                <form action="register_member.php" method="post" enctype="multipart/form-data">
+                <form action="register_member.php" method="POST" enctype="multipart/form-data">
                     First Name: <input class="form-control" type="text" name="first_name"><br>
                     Last Name: <input class="form-control" type="text" name="last_name"><br>
                     Email: <input class="form-control" type="email" name="email"><br>
@@ -155,7 +205,45 @@
                     <input class="btn btn-prymary mt-3" type="submit" value="Register Member">
                 </form>
             </div>
+            <div class="col-md-6">
+                <h2>Register Trainer</h2>
+                <form action="register_trainer.php" method="post">
+                    First Name: <input class="form-control" type="text" name="first_name"><br>
+                    Last Name: <input class="form-control" type="text" name="last_name"><br>
+                    Email: <input class="form-control" type="email" name="email"><br>
+                    Phone Number: <input class="form-control" type="text" name="phone_number"><br>
+                    <input class="btn btn-primary" type="submit" value="Register Trainer">
+                </form>
+            </div>
         </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Asign Trainer to Member</h2>
+                    <form action="assign_trainer.php" method="POST">
+                        <label for="">Select Member</label>
+                        <select name="member" class="form-select">       
+                            <?php
+                            foreach($select_members as $member) : ?>                 
+                                <option value="<?php echo $member['member_id'] ?>">
+                                    <?php echo $member['first_name'] . " " . $member['last_name'] ?>
+                                </option> 
+                            <?php endforeach; ?>
+                        </select>
+                        
+                        <label for="">Select Trainer</label>
+                        <select name="trainer" class="form-select">                             
+                            <?php
+                            foreach($select_trainers as $trainer) : ?>                 
+                                <option value="<?php echo $trainer['trainer_id'] ?>">
+                                    <?php echo $trainer['first_name'] . " " . $trainer['last_name'] ?>
+                                </option> 
+                            <?php endforeach; ?>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary">Assign Trainer</button>
+                    </form>
+                </div>
+            </div>
     </div>
 
     <?php $conn->close(); ?>
